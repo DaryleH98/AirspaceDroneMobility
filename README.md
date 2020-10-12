@@ -6,10 +6,9 @@ All recreational drone pilots are required by the FAA and LAANC to fly at or bel
 
 # Tools and Technologies used
 
-1. Apache Kafka
-1. Apache Spark Streaming
 1. AWS S3 bucket
-1. PostgreSQL
+1. Apache Spark 
+1. PostgreSQL(PostGIS)
 1. Flask
 
 # Slides
