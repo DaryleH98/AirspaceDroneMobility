@@ -1,0 +1,95 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{%block scripts %}
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+   crossorigin=""/>
+   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+   integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+   crossorigin=""></script>
+
+   <style>
+       #mapid { 
+           height: 400px;
+           margin-bottom: 20px;
+        }
+       
+   </style>
+
+{% endblock %}
+
+{% block content %}
+<div id="mapid"></div>
+
+<!-- 40.78535503247915,-74.01126796173556 | 40.782536670898686,-73.98348132626916 | 40.796053318729946,-73.95120182762396 | 40.77941705375373,-73.9589283033635  -->
+<div>
+    <center>
+        <form action="/" method="GET">
+            <input type="text" name="loc" placeholder="lat, lng">
+            <input type="submit" value="Change map center">
+        </form>
+    </center>
+</div>
+
+<center>
+    <form action="/check-path" method="POST"> 
+        <input type="text" name="waypoints" id="waypoints" placeholder="lat1,lng1 | lat2,lng2 | ...">
+        <input type="date" name="trip_date" id="trip-date">
+        <input type="submit" value="Check Path">
+    </form>
+</center>
+
+
+{% endblock %}
+
+{% block endscripts %}
+
+<script>
+    var mymap = L.map('mapid').setView([{{lat}}, {{lng}}], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(mymap);
+    var popup = L.popup();
+    function onMapClick(e) {
+        window.ev = e ;
+        var coords = e.latlng.lat + "," + e.latlng.lng;
+        console.log(coords);
+        var content = '<b>Coordinates:</b> ' + `<input id="loc" value="${coords}"> <br><button onclick="copyCoords()">Copy</button>`;
+        console.log(content);
+        popup
+            .setLatLng(e.latlng)
+            .setContent(content)
+            .openOn(mymap);
+    }
+
+    mymap.on('click', onMapClick);
+
+    {% for a in airspace_info %}
+
+        var circle = L.circle([{{a['LATITUDE']}}, {{ a['LONGITUDE']}}], {
+            color: 'red',
+            fillColor: '#f03',
+            fillOpacity: 0.1,
+            radius: 500,
+            weight: 0
+        }).addTo(mymap);
+
+        // var marker = L.marker([{{a['LATITUDE']}}, {{ a['LONGITUDE']}}]).addTo(mymap);
+        
+        circle.bindPopup("{{ a['APT1_NAME'] }} Airspace station <br> {{ a['GLOBALID']}} <br> Centered at {{a['LATITUDE']}}, {{ a['LONGITUDE']}}")
+
+    {% endfor %}
+
+    function copyCoords() {
+        var copyText = document.getElementById("loc");
+        copyText.select();
+        copyText.setSelectionRange(0, 99999)
+        document.execCommand("copy");
+    }
+
+    
+</script>
+
+{% endblock %}

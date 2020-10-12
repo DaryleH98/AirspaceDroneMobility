@@ -1,0 +1,40 @@
+<html>
+  <head>
+    <title>Flask UI</title>
+    {% block scripts %}
+    {% endblock %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <style>
+      .table-responsive {
+        display: table;
+      }
+    </style>
+  </head>
+  <body>
+    <div><a href="/">Home</a></div>
+    <center><h1>{{title}}</h1></center>
+    <hr>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul>
+    {% for message in messages %}
+        <li>{{ message }} </li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+    {% block endscripts %}{% endblock %}
+    <script>
+      var tables = document.getElementsByClassName("dataframe");
+      var classes = ['table', "table-striped", 'table-hover', 'table-dark', 'table-responsive', 'text-center'];
+      for (table of tables) {
+         classes.forEach(e => {
+          table.classList.add(e);
+         })
+         table.style.width = "70%"
+
+      };
+    </script>
+  </body>
+</html>

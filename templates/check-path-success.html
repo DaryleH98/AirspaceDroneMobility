@@ -1,0 +1,49 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+
+<div>
+    <center>
+        <p>
+            The path you're going to take is <br> 
+            
+            <b>{{ path }}</b>
+            <br>
+            <b>Path distance:</b> {{ path_distance }} km
+        </p>
+        <p>
+            Here's how the weather looks like around your path for next 7 days.
+
+            <br>
+            
+                {{ forecast_table | safe }}
+            
+
+            <br>
+            <hr>
+        </p> 
+        <p>
+            You've selected {{ trip_date }} as your date of flight.
+
+            <br>
+            
+            Average of Last 30 days weather data from your trip date.
+
+            <br>
+        
+            {{ monthly_summary | safe }}
+
+            <br><hr>
+        
+            Average of Last 2 years weather data from your trip date.
+            <br>
+        
+            {{ yearly_summary | safe }}
+        
+        </p>
+    </center>
+</div>
+
+
+{% endblock %}
