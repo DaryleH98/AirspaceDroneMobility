@@ -8,7 +8,7 @@ import pandas as pd
 from sqlalchemy import create_engine
 
 
-engine = create_engine(f'postgresql+psycopg2://{config.DB_USER}@{config.DB_HOST}/{config.DB_NAME}')
+engine = create_engine(f'postgresql+psycopg2://{config.DB_USER}:{config.DB_PASSWORD}@{config.DB_HOST}/{config.DB_NAME}')
 
 def get_connection():
     return psycopg2.connect(host=config.DB_HOST, dbname=config.DB_NAME, user=config.DB_USER, password=config.DB_PASSWORD)
